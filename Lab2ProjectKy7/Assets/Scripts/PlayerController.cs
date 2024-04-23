@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     public float speed = 20.0f;
     public float health = 100.0f;
 
+    public Camera playerCam;
+
 
     Rigidbody playerRb;
 
@@ -20,13 +22,22 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        PlayerMovement();
+        CameraFollow();
+    }
+
+    private void PlayerMovement()
+    {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
-        
 
-        transform.Translate(Vector3.forward * speed * Time.deltaTime * verticalInput);
-        transform.Translate(Vector3.right * speed * Time.deltaTime * horizontalInput);
 
+        playerRb.AddForce(Vector3.forward * speed * verticalInput);
+        playerRb.AddForce(Vector3.right * speed * horizontalInput);
+    }
+
+    void CameraFollow()
+    {
+        playerCam.transform.position = new Vector3(playerRb.position.x, 20, playerRb.position.z);
     }
 }
