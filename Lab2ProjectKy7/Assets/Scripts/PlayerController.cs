@@ -6,9 +6,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 20.0f;
-    public float health = 100.0f;
+    public int health = 100;
 
     public Camera playerCam;
+
+    public ParticleSystem shablooey;
+    public ParticleSystem healthyParticle;
 
 
     Rigidbody playerRb;
@@ -39,5 +42,30 @@ public class PlayerController : MonoBehaviour
     void CameraFollow()
     {
         playerCam.transform.position = new Vector3(playerRb.position.x, 20, playerRb.position.z);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            float cooldown = 0; cooldown = cooldown - Time.deltaTime;
+
+            if (cooldown <= 0 && health > 0)
+            {
+                health--;
+                Debug.Log(health);
+                cooldown = 2;
+            }
+            else if (health <= 0)
+            {
+                GameOver();
+            }
+        }
+    }
+
+    void GameOver()
+    {
+        Debug.Log("PP");
+        shablooey.Play();
     }
 }
